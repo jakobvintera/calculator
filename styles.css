@@ -9,7 +9,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: lightslategray;
+  background-color: rgb(88, 88, 88);
 }
 
 .title {
@@ -49,7 +49,7 @@ body {
   height: 470px;
 }
 
-.window {
+.display {
   display: flex;
   justify-content: center;
   border-left: 2px solid black;
@@ -152,11 +152,14 @@ button {
   background-color: rgb(72, 16, 94);
 }
 
-.history {
+.historyPanel {
   display: flex;
   background-color: rgb(53, 6, 71);
   min-height: 467px;
-  border: 2px solid black;
+  border-left: 2px solid black;
+  border-top: 2px solid black;
+  border-right: 1px solid rgb(185, 118, 211);
+  border-bottom: 1px solid rgb(185, 118, 211);
   width: 200px;
   border-radius: 3px;
 }
