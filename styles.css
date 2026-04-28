@@ -9,6 +9,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: lightslategray;
 }
 
 .title {
@@ -28,51 +29,111 @@ body {
 .calculator {
   display: flex;
   justify-content: space-evenly;
-  border: 2px solid black;
+  border-left: 6px solid rgb(144, 144, 144);
+  border-top: 6px solid rgb(162, 162, 162);
+  border-right: 6px solid rgb(25, 25, 25);
+  border-bottom: 6px solid black;
+  border-radius: 10px;
   background-color: rgb(111, 112, 121);
   padding: 10px;
-  gap: 10px;
   width: 400px;
   height: 500px;
   padding: 40px 30px 10px 30px;
-}
-
-.window {
-  display: flex;
-  justify-content: center;
-  border: 2px solid rgb(245, 245, 245);
-  width: 300px;
-  height: 40px;
-  background-color: silver;
 }
 
 .left {
   display: flex;
   flex-direction: column;
   padding: 10px;
-  gap: 10px;
+  gap: 3px;
+  height: 470px;
+}
+
+.window {
+  display: flex;
+  justify-content: center;
+  border-left: 2px solid black;
+  border-top: 2px solid black;
+  border-right: 2px solid rgb(245, 245, 245);
+  border-bottom: 2px solid rgb(245, 245, 245);
+  margin-bottom: 15px;
+  width: 270px;
+  height: 56px;
+  border-radius: 3px;
+  background-color: silver;
+}
+
+.operators {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 70px;
+  gap: 3px;
+  margin-bottom: 7px;
 }
 
 .numbers {
   display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  gap: 3px;
 }
 
 /* BUTTONS */
 button {
-  height: 60px;
-  width: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
   color: rgb(72, 16, 94);
+  font-size: 2rem;
   font-weight: bold;
+  border-radius: 15%;
+  border-left: 3px solid rgb(144, 144, 144);
+  border-top: 3px solid rgb(162, 162, 162);
+  border-right: 3px solid rgb(25, 25, 25);
+  border-bottom: 3px solid black;
+}
+
+#clear {
+  flex: 1 1 0;
+  font-size: 1.2rem;
+  width: 100px;
+  min-height: 50px;
+  max-height: 60px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+}
+
+
+#root-image {
+  height: 28px;
+}
+
+#plusminus-image {
+  height: 34px;
+}
+
+#delete-image {
+  height: 32px;
 }
 
 .right {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 70px;
+  width: 80px;
+  height: 470px;
   padding: 10px;
+  gap: 3px;
 }
 
+.right button {
+  flex: 1;
+  width: 100%;
+}
 
 /* OVERVIEW */
 .overview {
@@ -81,8 +142,12 @@ button {
   align-items: center;
   height: 500px;
   width: 200px;
-  border: 2px solid black;
-  gap: 10px;
+  border-left: 6px solid rgb(144, 144, 144);
+  border-top: 6px solid rgb(162, 162, 162);
+  border-right: 6px solid rgb(25, 25, 25);
+  border-bottom: 6px solid black;
+  border-radius: 10px;
+  gap: 7px;
   padding: 20px 10px 30px 10px;
   background-color: rgb(72, 16, 94);
 }
@@ -90,11 +155,12 @@ button {
 .history {
   display: flex;
   background-color: rgb(53, 6, 71);
-  height: 500px;
-  border: 1px solid black;
+  min-height: 467px;
+  border: 2px solid black;
   width: 200px;
+  border-radius: 3px;
 }
 
-h4 {
+h3 {
   color: white;
 }
