@@ -3,13 +3,18 @@
   padding: 0px;
 }
 
+@font-face {
+  font-family: CalculatorFont;
+  src: url("sources/PocketCalculator-qjd.ttf");
+}
+
 body {
   font-family: "Roboto";
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgb(88, 88, 88);
+  background-color: rgb(73, 73, 73);
 }
 
 .title {
@@ -17,6 +22,8 @@ body {
   justify-content: center;
   margin: 30px 20px;
   color: rgb(72, 16, 94);
+  font-size: 3rem;
+  font-family: "CalculatorFont";
 }
 
 .workingArea {
@@ -51,7 +58,8 @@ body {
 
 .display {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
+  align-items: center;
   border-left: 2px solid black;
   border-top: 2px solid black;
   border-right: 2px solid rgb(245, 245, 245);
@@ -61,6 +69,13 @@ body {
   height: 56px;
   border-radius: 3px;
   background-color: silver;
+}
+
+#displayNumber {
+  font-size: 2.2rem;
+  font-family: "CalculatorFont";
+  margin-right: 5px;
+  margin-left: 5px;
 }
 
 .operators {
