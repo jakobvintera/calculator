@@ -39,16 +39,11 @@ commaButton.addEventListener("click", (event) => {
 
 //Prefix button
 prefixButton.addEventListener("click", (event) => {
-  console.log(displayNumber.textContent)
   if (event.target.id === "prefix" && displayNumber.textContent === "0" || opArray.includes(displayNumber.textContent)){
-    console.log("A")
     return false
   } else if (event.target.id === "prefix" && displayNumber.textContent[0] != "-" && !isNaN(parseInt(displayNumber.textContent))){
-    console.log("B")
-    console.log(parseInt(displayNumber.textContent))
     displayNumber.textContent = "-" + displayNumber.textContent;
   } else if (event.target.id === "prefix" && isNaN(parseInt(displayNumber.textContent[0])) && displayNumber.textContent != undefined){
-    console.log("C")
     displayNumber.textContent = displayNumber.textContent.slice(1);
   }})
 
@@ -83,7 +78,6 @@ for (button of operationButtons){
   )
 }
 
-
 //Clear button
 clearButton.addEventListener("click", (event) => {
   displayNumber.textContent = "0";
@@ -91,13 +85,14 @@ clearButton.addEventListener("click", (event) => {
 
 //Delete button
 deleteButton.addEventListener("click", (event) => {
-  if (displayNumber.textContent.length === 1){
-      displayNumber.textContent = "0"
+  if (displayNumber.textContent.length === 1 ||
+      displayNumber.textContent.length === 2 &&
+      displayNumber.textContent[0] === "-"){
+        displayNumber.textContent = "0"
   } else {
       displayNumber.textContent = displayNumber.textContent.slice(0, -1);
   }
 })
-
 
 //Number assembler
 function concatNumber(number){
