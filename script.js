@@ -90,6 +90,13 @@ clearButton.addEventListener("click", (event) => {
 })
 
 //Delete button
+deleteButton.addEventListener("click", (event) => {
+  if (displayNumber.textContent.length === 1){
+      displayNumber.textContent = "0"
+  } else {
+      displayNumber.textContent = displayNumber.textContent.slice(0, -1);
+  }
+})
 
 
 //Number assembler
