@@ -85,7 +85,9 @@ for (button of operationButtons){
 
 
 //Clear button
-
+clearButton.addEventListener("click", (event) => {
+  displayNumber.textContent = "0";
+})
 
 //Delete button
 
