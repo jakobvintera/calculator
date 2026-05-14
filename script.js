@@ -1,25 +1,20 @@
 const numButtons = document.querySelectorAll(".numbers button");
-//const operatorButtons = document.querySelectorAll(".operator");
+const operationButtons = document.querySelectorAll(".right button");
 const display = document.querySelector(".display");
 let displayNumber = document.querySelector("#displayNumber");
 const historyPanel = document.querySelector(".historyPanel");
 let firstNumber;
 let secondNumber;
-let operator;
+let storedOperator;
+let result;
 
 
-// zahl, zahl, zahl number concat bis user operator drückt, dann store in firstNumber (falls firstNumber leer ist) dann zahl, zahl, zahl number concat bis user operator oder = drückt, dann store in secondNumber(falls firstNumber voll ist) und ausrechnen, result bei display und historyPanel anzeigen, dann wird secondNumber zu firstNumber, falls dann eine zahl eingegeben wird wird sie in secondNumber gespeichert
+// zahl, zahl, zahl number concat bis user operator drückt, dann store in firstNumber (falls firstNumber leer ist) dann zahl, zahl, zahl number concat bis user operator oder = drückt, dann store in secondNumber(falls firstNumber voll ist) und ausrechnen
+// result bei display und historyPanel anzeigen
+// dann wird result zu firstNumber und secondNumber muss gecleart werden, falls dann eine zahl eingegeben wird wird sie in secondNumber gespeichert
 
 
-
-
-function calculateResult(firstNumber, secondNumber, operator){
-
-}
-
-
-
-// Number Button Input Listener
+// Number button input listener
 for (button of numButtons){
   button.addEventListener("click", (event) => {
     if (event.target.id === "prefix" && displayNumber.textContent != 0 && displayNumber.textContent[0] != "-"){
@@ -32,14 +27,48 @@ for (button of numButtons){
         displayNumber.textContent = "0."
     } else {
         let input = event.target.textContent;
-        concatNumber(input);}
+        concatNumber(input);
+      }
   })
 }
 
 
-//Number Assembler
+// Operator button input listener
+for (button of operationButtons){
+  button.addEventListener("click", (event) => {
+    if (event.target.id === "addition"){
+
+      assembleOperation("+");
+      displayNumber.textContent = "+";
+    console.log(firstNumber);
+    console.log(storedOperator);
+    console.log(secondNumber);
+    }
+    if (event.target.id === "subtraction"){
+      displayNumber.textContent = "-";
+      assembleOperation("-");
+    }
+    if (event.target.id === "multiplication"){
+      displayNumber.textContent = "×";
+      assembleOperation("×");
+    }
+    }
+
+/*     calculateResult(operator); */
+  )
+}
+
+
+//Clear button
+
+
+//Delete button
+
+
+//Number assembler
 function concatNumber(number){
-  if (displayNumber.textContent === "0") {
+  let array = ["0", "+", "-", "×","÷"]
+  if (array.includes(displayNumber.textContent)) {
     displayNumber.textContent = number;
   } else if (displayNumber.textContent.length === 15){
       return false;
@@ -48,14 +77,53 @@ function concatNumber(number){
   }
 }
 
-/*
+//Store operands and initiate calculation
+function assembleOperation(operation){
+  if (firstNumber === undefined){firstNumber = displayNumber.textContent}
+    else {secondNumber = displayNumber.textContent}
+  if (storedOperator === undefined){storedOperator = operation}
+    else {
 
-  if (event.target.id === "zero"){
-    let input = 0;
-    console.log(input);
-    concatNumber(input);
+
+    }
+}
+
+
+function calculateResult(operation){
+  //Addition
+  if (operation === "+"){
+    console.log(firstNumber);
+    console.log(storedOperator);
+    console.log(secondNumber);
+    result = parseInt(firstNumber)+parseInt(secondNumber);
+    displayNumber.textContent = result;
+    firstNumber = result;
+    console.log(result);
   }
 
-  if (event.target.id === "comma")
-  if (event.target.id === "prefix")
- */
+  //Subtraction
+  if (operation === "-"){
+    result = parseInt(firstNumber)-parseInt(secondNumber);
+    console.log(result);
+  }
+  //Multiplication
+  if (operation === "×"){
+    result = parseInt(firstNumber)*parseInt(secondNumber);
+    console.log(result);
+  }
+  //Division
+    if (operation === "÷"){
+    result = parseInt(firstNumber)/parseInt(secondNumber);
+    console.log(result);
+  }
+
+  //Power2
+
+  //Power3
+
+  //Square Root
+
+  //Pi
+
+}
+
