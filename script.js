@@ -5,6 +5,10 @@ const clearButton = document.querySelector("#clear");
 const deleteButton = document.querySelector("#delete");
 const prefixButton = document.querySelector("#prefix");
 const commaButton = document.querySelector("#comma");
+const rootButton = document.querySelector("#root");
+const suptwoButton = document.querySelector("#suptwo");
+const supthreeButton = document.querySelector("#supthree");
+const piButton = document.querySelector("#pi");
 const display = document.querySelector(".display");
 const historyPanel = document.querySelector(".historyPanel");
 let displayNumber = document.querySelector("#displayNumber");
@@ -84,14 +88,14 @@ for (button of operationButtons){
 //Store and initiate calculation
 function storeNumbers(){
   if (firstNumber === undefined){
-      firstNumber = parseInt(displayNumber.textContent.slice(0, -1));
+      firstNumber = parseFloat(displayNumber.textContent.slice(0, -1));
       console.log(`stored ${firstNumber} as first number`);
   } else if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
-      secondNumber = parseInt(displayNumber.textContent.slice(0, -1));
+      secondNumber = parseFloat(displayNumber.textContent.slice(0, -1));
       console.log(`stored ${secondNumber} as second number`);
       calculateResult(storedOperator);
   } else {
-    secondNumber = parseInt(displayNumber.textContent);
+    secondNumber = parseFloat(displayNumber.textContent);
     console.log(`stored ${secondNumber} as second number`);
     calculateResult(storedOperator);
   }
@@ -137,16 +141,6 @@ function calculateResult(operation){
     console.log(`dividing ${firstNumber} by ${secondNumber} to get ${result}`)
   }
 
-console.log(firstNumber, secondNumber, result)
-
-  //Power2
-
-  //Power3
-
-  //Square Root
-
-  //Pi
-
   //Output Validation
   if (result.toString().length > 10){displayNumber.textContent = result.toPrecision(10)}
   else {displayNumber.textContent = result}
@@ -160,7 +154,27 @@ console.log(firstNumber, secondNumber, result)
   console.log(`reset secondNumber and storedOperator`)
 }
 
+//Single Number Operations
+  //Square Root
+rootButton.addEventListener("click", () => {
+  if (errorState === true){return}
+  if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
+    saveNumber = parseFloat(displayNumber.textContent.slice(0, -1));
+    console.log(saveNumber)
+  } else {
+    saveNumber = displayNumber.textContent;
+  }
+  console.log(saveNumber)
+  clearCalculator();
 
+})
+suptwo
+  //Power2
+
+  //Power3
+
+
+  //Pi
 
 //Comma button
 commaButton.addEventListener("click", (event) => {
@@ -192,15 +206,16 @@ prefixButton.addEventListener("click", () => {
     console.log(displayNumber.textContent)
   }})
 
-//Clear button
-clearButton.addEventListener("click", () => {
+function clearCalculator(){
   displayNumber.textContent = "0";
   firstNumber = undefined;
   secondNumber = undefined;
   storedOperator = undefined;
   result = undefined;
   errorState = false;
-})
+}
+
+clearButton.addEventListener("click", clearCalculator);
 
 //Delete button
 deleteButton.addEventListener("click", () => {
