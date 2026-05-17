@@ -33,8 +33,8 @@ for (button of numButtons){
         && (!Object.values(opObject).some(op => displayNumber.textContent.endsWith(op)))){
           concatNumber(event.target.textContent);
     }
-    if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
-      displayNumber.textContent = undefined;
+    if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op)) && event.target.id != "prefix"){
+      displayNumber.textContent = 0;
       concatNumber(event.target.textContent);
     }
   })
@@ -51,9 +51,9 @@ function concatNumber(number){
   if (displayNumber.textContent.length === 10){
       return false;
   } else if (displayNumber.textContent === "0") {
-    displayNumber.textContent = number;
+    displayNumber.textContent = parseFloat(number);
   } else
-    displayNumber.textContent += number;
+    displayNumber.textContent += parseFloat(number);
   }
 
 
@@ -98,33 +98,30 @@ resultButton.addEventListener("click", () => {
   storeNumbers();
 })
 
-
+//Arithmetic Calculations
 function calculateResult(operation){
   //Addition
   if (operation === "+"){
-    result = parseInt(firstNumber)+parseInt(secondNumber);
+    result = parseFloat(firstNumber)+parseFloat(secondNumber)
     console.log(`adding ${secondNumber} to ${firstNumber} to get ${result}`)
   }
   //Subtraction
   if (operation === "-"){
-    result = parseInt(firstNumber)-parseInt(secondNumber);
+    result = parseFloat(firstNumber)-parseFloat(secondNumber)
     console.log(`subtracting ${secondNumber} from ${firstNumber} to get ${result}`)
   }
   //Multiplication
   if (operation === "×"){
-    result = parseInt(firstNumber)*parseInt(secondNumber);
+    result = parseFloat(firstNumber)*parseFloat(secondNumber)
     console.log(`multiplicating ${secondNumber} with ${firstNumber} to get ${result}`)
   }
   //Division
     if (operation === "÷"){
-    result = parseInt(firstNumber)/parseInt(secondNumber);
+    result = parseFloat(firstNumber)/parseFloat(secondNumber)
     console.log(`dividing ${firstNumber} by ${secondNumber} to get ${result}`)
   }
 
-  if (result.toString().length > 10){displayNumber.textContent = result.toPrecision(10);}
-  else {displayNumber.textContent = result}
 
-  if (event.target.id !== "result"){displayNumber.textContent += opObject[event.target.id]}
 
   //Power2
 
@@ -133,6 +130,11 @@ function calculateResult(operation){
   //Square Root
 
   //Pi
+
+  //Output Validation
+  if (result.toString().length > 10){displayNumber.textContent = result.toPrecision(10)}
+  else {displayNumber.textContent = result}
+  if (event.target.id !== "result"){displayNumber.textContent += opObject[event.target.id]}
 
   //Reset variables
   firstNumber = result;
@@ -151,21 +153,25 @@ commaButton.addEventListener("click", (event) => {
   } else if (event.target.id === "comma" && displayNumber.textContent === "0"){
       displayNumber.textContent = "0.";
   } else {
-      displayNumber.textContent += "."
+      displayNumber.textContent += ".";
   }
 })
 
 //Prefix button
-prefixButton.addEventListener("click", (event) => {
-  if (displayNumber.textContent === "0" || Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
-    console.log("a")
-    return false
-  } else if (displayNumber.textContent[0] != "-" && !isNaN(parseInt(displayNumber.textContent))){
-    console.log("b")
+prefixButton.addEventListener("click", () => {
+  console.log(displayNumber.textContent)
+  if (displayNumber.textContent === "0"){
+    console.log("a");
+    return false;
+  } else if (displayNumber.textContent[0] != "-" && !isNaN(parseFloat(displayNumber.textContent))){
+    console.log("minus added");
     displayNumber.textContent = "-" + displayNumber.textContent;
-  } else if (isNaN(parseInt(displayNumber.textContent[0])) && displayNumber.textContent != undefined){
-    console.log("c")
+  } else if (Number.isNaN(parseFloat(displayNumber.textContent[0])) && displayNumber.textContent !== undefined){
+    console.log("minus removed");
+    console.log(displayNumber.textContent)
+    console.log(Number.isNaN(parseFloat(displayNumber.textContent[0])))
     displayNumber.textContent = displayNumber.textContent.slice(1);
+    console.log(displayNumber.textContent)
   }})
 
 //Clear button
