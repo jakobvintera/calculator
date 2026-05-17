@@ -20,13 +20,20 @@ let firstNumber;
 let secondNumber;
 let storedOperator;
 let result;
+let errorState = false;
 
 
 //Number buttons
 for (button of numButtons){
   button.addEventListener("click", (event) => {
-    if (result !== undefined && event.target.id !== "prefix"){
-      result = undefined;
+    if (errorState === true){return}
+    if (result !== undefined && firstNumber !== undefined && event.target.id !== "prefix"){
+      result = 0;
+      displayNumber.textContent = 0;
+      concatNumber(event.target.textContent);
+      return;
+    } else if (result !== undefined && event.target.id !== "prefix"){
+      result = 0;
       displayNumber.textContent = 0;
     }
     if (event.target.id != "comma" && event.target.id != "prefix"
@@ -60,9 +67,11 @@ function concatNumber(number){
 // Operator buttons
 for (button of operationButtons){
   button.addEventListener("click", (event) => {
+    if (errorState === true){return}
     if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
       displayNumber.textContent = displayNumber.textContent.slice(0, -1);
       displayNumber.textContent = displayNumber.textContent += opObject[event.target.id];
+      storeNumbers();
       storeOperator();
     } else{
         displayNumber.textContent = displayNumber.textContent += opObject[event.target.id];
@@ -75,14 +84,14 @@ for (button of operationButtons){
 //Store and initiate calculation
 function storeNumbers(){
   if (firstNumber === undefined){
-      firstNumber = displayNumber.textContent.slice(0, -1);
+      firstNumber = parseInt(displayNumber.textContent.slice(0, -1));
       console.log(`stored ${firstNumber} as first number`);
   } else if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
-      secondNumber = displayNumber.textContent.slice(0, -1);
+      secondNumber = parseInt(displayNumber.textContent.slice(0, -1));
       console.log(`stored ${secondNumber} as second number`);
       calculateResult(storedOperator);
   } else {
-    secondNumber = displayNumber.textContent
+    secondNumber = parseInt(displayNumber.textContent);
     console.log(`stored ${secondNumber} as second number`);
     calculateResult(storedOperator);
   }
@@ -90,12 +99,14 @@ function storeNumbers(){
 
 //Simple Result
 resultButton.addEventListener("click", () => {
-  if (firstNumber === undefined){
+  if (errorState === true){return}
+  if (firstNumber === undefined || storedOperator === undefined){
     return false;
   } else if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
     return false;
+  } else {
+      storeNumbers();
   }
-  storeNumbers();
 })
 
 //Arithmetic Calculations
@@ -117,11 +128,16 @@ function calculateResult(operation){
   }
   //Division
     if (operation === "÷"){
+      if(secondNumber === 0){
+        displayNumber.textContent = "Thats not allowed";
+        errorState = true;
+        return;
+      }
     result = parseFloat(firstNumber)/parseFloat(secondNumber)
     console.log(`dividing ${firstNumber} by ${secondNumber} to get ${result}`)
   }
 
-
+console.log(firstNumber, secondNumber, result)
 
   //Power2
 
@@ -139,7 +155,7 @@ function calculateResult(operation){
   //Reset variables
   firstNumber = result;
   console.log(`set firstNumber to ${result}`)
-  secondNumber = undefined;
+  secondNumber = 0;
   storedOperator = undefined;
   console.log(`reset secondNumber and storedOperator`)
 }
@@ -148,6 +164,7 @@ function calculateResult(operation){
 
 //Comma button
 commaButton.addEventListener("click", (event) => {
+  if (errorState === true){return}
   if (event.target.id === "comma" && displayNumber.textContent.includes(".")){
       return false;
   } else if (event.target.id === "comma" && displayNumber.textContent === "0"){
@@ -159,6 +176,7 @@ commaButton.addEventListener("click", (event) => {
 
 //Prefix button
 prefixButton.addEventListener("click", () => {
+  if (errorState === true){return}
   console.log(displayNumber.textContent)
   if (displayNumber.textContent === "0"){
     console.log("a");
@@ -175,16 +193,18 @@ prefixButton.addEventListener("click", () => {
   }})
 
 //Clear button
-clearButton.addEventListener("click", (event) => {
+clearButton.addEventListener("click", () => {
   displayNumber.textContent = "0";
   firstNumber = undefined;
   secondNumber = undefined;
   storedOperator = undefined;
   result = undefined;
+  errorState = false;
 })
 
 //Delete button
-deleteButton.addEventListener("click", (event) => {
+deleteButton.addEventListener("click", () => {
+  if (errorState === true){return}
   if (displayNumber.textContent.length === 1 ||
       displayNumber.textContent.length === 2 &&
       displayNumber.textContent[0] === "-")
