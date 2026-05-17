@@ -9,12 +9,12 @@ const display = document.querySelector(".display");
 const historyPanel = document.querySelector(".historyPanel");
 let displayNumber = document.querySelector("#displayNumber");
 
-const opArray = ["+", "-", "×","÷"]
 const numArray = ["1","2","3","4","5","6","7","8","9","0"]
 const opObject = {addition : "+",
                   subtraction: "-",
                   multiplication: "×",
-                  division: "÷"}
+                  division: "÷",
+                  result: "="}
 
 let firstNumber;
 let secondNumber;
@@ -25,21 +25,25 @@ let result;
 //Number buttons
 for (button of numButtons){
   button.addEventListener("click", (event) => {
+    if (result !== undefined && event.target.id !== "prefix"){
+      result = undefined;
+      displayNumber.textContent = 0;
+    }
     if (event.target.id != "comma" && event.target.id != "prefix"
-        && (!opArray.some(op => displayNumber.textContent.endsWith(op)))){
+        && (!Object.values(opObject).some(op => displayNumber.textContent.endsWith(op)))){
           concatNumber(event.target.textContent);
     }
-    if (opArray.some(op => displayNumber.textContent.endsWith(op))){
-      storeOperator();
+    if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
       displayNumber.textContent = undefined;
       concatNumber(event.target.textContent);
     }
   })
 }
 
+//Store Operator
 function storeOperator(){
   storedOperator = displayNumber.textContent.slice(-1);
-  console.log(`stored ${storedOperator} as operator`);
+  console.log(`stored "${storedOperator}" as new operator`);
 }
 
 //Number assembler
@@ -56,14 +60,14 @@ function concatNumber(number){
 // Operator buttons
 for (button of operationButtons){
   button.addEventListener("click", (event) => {
-    if (opArray.some(op => displayNumber.textContent.endsWith(op))){
+    if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
       displayNumber.textContent = displayNumber.textContent.slice(0, -1);
       displayNumber.textContent = displayNumber.textContent += opObject[event.target.id];
-      console.log(`${opObject[event.target.id]} operator changed`);
-    } else {
-        displayNumber.textContent = displayNumber.textContent += opObject[event.target.id]
-        console.log(`${opObject[event.target.id]} operator added`);
+      storeOperator();
+    } else{
+        displayNumber.textContent = displayNumber.textContent += opObject[event.target.id];
         storeNumbers();
+        storeOperator();
     }
   })
 }
@@ -73,52 +77,54 @@ function storeNumbers(){
   if (firstNumber === undefined){
       firstNumber = displayNumber.textContent.slice(0, -1);
       console.log(`stored ${firstNumber} as first number`);
-  } else if (displayNumber.textContent[displayNumber.textContent.length] !==
-             opArray.some(op => displayNumber.textContent.endsWith(op))){
+  } else if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
       secondNumber = displayNumber.textContent.slice(0, -1);
       console.log(`stored ${secondNumber} as second number`);
       calculateResult(storedOperator);
   } else {
-    }
+    secondNumber = displayNumber.textContent
+    console.log(`stored ${secondNumber} as second number`);
+    calculateResult(storedOperator);
   }
+}
 
 //Simple Result
-resultButton.addEventListener("click", (event) => {
-  result = parseInt(firstNumber)+parseInt(secondNumber);
-  if (result.length > 10){displayNumber.textContent = result.toPrecision(10);}
-  else {displayNumber.textContent = result}
-  firstNumber = result;
+resultButton.addEventListener("click", () => {
+  if (firstNumber === undefined){
+    return false;
+  } else if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
+    return false;
+  }
+  storeNumbers();
 })
+
 
 function calculateResult(operation){
   //Addition
   if (operation === "+"){
     result = parseInt(firstNumber)+parseInt(secondNumber);
-      if (result.length > 10){displayNumber.textContent = result.toPrecision(10);}
-      else {displayNumber.textContent = result += opObject[event.target.id]}
-    firstNumber = result;
+    console.log(`adding ${secondNumber} to ${firstNumber} to get ${result}`)
   }
   //Subtraction
   if (operation === "-"){
     result = parseInt(firstNumber)-parseInt(secondNumber);
-      if (result.length > 10){displayNumber.textContent = result.toPrecision(10);}
-      else {displayNumber.textContent = result += opObject[event.target.id]}
-    firstNumber = result;
+    console.log(`subtracting ${secondNumber} from ${firstNumber} to get ${result}`)
   }
   //Multiplication
   if (operation === "×"){
     result = parseInt(firstNumber)*parseInt(secondNumber);
-      if (result.length > 10){displayNumber.textContent = result.toPrecision(10);}
-      else {displayNumber.textContent = result += opObject[event.target.id]}
-    firstNumber = result;
+    console.log(`multiplicating ${secondNumber} with ${firstNumber} to get ${result}`)
   }
   //Division
     if (operation === "÷"){
     result = parseInt(firstNumber)/parseInt(secondNumber);
-      if (result.length > 10){displayNumber.textContent = result.toPrecision(10);}
-      else {displayNumber.textContent = result += opObject[event.target.id]}
-    firstNumber = result;
+    console.log(`dividing ${firstNumber} by ${secondNumber} to get ${result}`)
   }
+
+  if (result.toString().length > 10){displayNumber.textContent = result.toPrecision(10);}
+  else {displayNumber.textContent = result}
+
+  if (event.target.id !== "result"){displayNumber.textContent += opObject[event.target.id]}
 
   //Power2
 
@@ -128,6 +134,12 @@ function calculateResult(operation){
 
   //Pi
 
+  //Reset variables
+  firstNumber = result;
+  console.log(`set firstNumber to ${result}`)
+  secondNumber = undefined;
+  storedOperator = undefined;
+  console.log(`reset secondNumber and storedOperator`)
 }
 
 
@@ -145,11 +157,14 @@ commaButton.addEventListener("click", (event) => {
 
 //Prefix button
 prefixButton.addEventListener("click", (event) => {
-  if (event.target.id === "prefix" && displayNumber.textContent === "0" || opArray.includes(displayNumber.textContent)){
+  if (displayNumber.textContent === "0" || Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
+    console.log("a")
     return false
-  } else if (event.target.id === "prefix" && displayNumber.textContent[0] != "-" && !isNaN(parseInt(displayNumber.textContent))){
+  } else if (displayNumber.textContent[0] != "-" && !isNaN(parseInt(displayNumber.textContent))){
+    console.log("b")
     displayNumber.textContent = "-" + displayNumber.textContent;
-  } else if (event.target.id === "prefix" && isNaN(parseInt(displayNumber.textContent[0])) && displayNumber.textContent != undefined){
+  } else if (isNaN(parseInt(displayNumber.textContent[0])) && displayNumber.textContent != undefined){
+    console.log("c")
     displayNumber.textContent = displayNumber.textContent.slice(1);
   }})
 
