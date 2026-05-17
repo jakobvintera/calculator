@@ -1,12 +1,12 @@
 const numButtons = document.querySelectorAll(".numbers button");
 const operationButtons = document.querySelectorAll(".operator");
+const resultButton = document.querySelector("#result");
 const clearButton = document.querySelector("#clear");
 const deleteButton = document.querySelector("#delete");
 const prefixButton = document.querySelector("#prefix");
 const commaButton = document.querySelector("#comma");
 const display = document.querySelector(".display");
 const historyPanel = document.querySelector(".historyPanel");
-
 let displayNumber = document.querySelector("#displayNumber");
 
 const opArray = ["+", "-", "×","÷"]
@@ -25,22 +25,111 @@ let result;
 //Number buttons
 for (button of numButtons){
   button.addEventListener("click", (event) => {
-    if (event.target.id != "comma" && event.target.id != "prefix" ){
+    if (event.target.id != "comma" && event.target.id != "prefix"
+        && (!opArray.some(op => displayNumber.textContent.endsWith(op)))){
+          concatNumber(event.target.textContent);
+    }
+    if (opArray.some(op => displayNumber.textContent.endsWith(op))){
+      storeOperator();
+      displayNumber.textContent = undefined;
       concatNumber(event.target.textContent);
-  }})
+    }
+  })
+}
+
+function storeOperator(){
+  storedOperator = displayNumber.textContent.slice(-1);
+  console.log(`stored ${storedOperator} as operator`);
 }
 
 //Number assembler
 function concatNumber(number){
-  if (displayNumber.textContent === "0") {
-    displayNumber.textContent = number;
-  } else if (displayNumber.textContent[displayNumber.textContent.length] === opArray.includes(displayNumber.textContent)){
-
-  } else if (displayNumber.textContent.length === 15){
+  if (displayNumber.textContent.length === 10){
       return false;
+  } else if (displayNumber.textContent === "0") {
+    displayNumber.textContent = number;
   } else
     displayNumber.textContent += number;
   }
+
+
+// Operator buttons
+for (button of operationButtons){
+  button.addEventListener("click", (event) => {
+    if (opArray.some(op => displayNumber.textContent.endsWith(op))){
+      displayNumber.textContent = displayNumber.textContent.slice(0, -1);
+      displayNumber.textContent = displayNumber.textContent += opObject[event.target.id];
+      console.log(`${opObject[event.target.id]} operator changed`);
+    } else {
+        displayNumber.textContent = displayNumber.textContent += opObject[event.target.id]
+        console.log(`${opObject[event.target.id]} operator added`);
+        storeNumbers();
+    }
+  })
+}
+
+//Store and initiate calculation
+function storeNumbers(){
+  if (firstNumber === undefined){
+      firstNumber = displayNumber.textContent.slice(0, -1);
+      console.log(`stored ${firstNumber} as first number`);
+  } else if (displayNumber.textContent[displayNumber.textContent.length] !==
+             opArray.some(op => displayNumber.textContent.endsWith(op))){
+      secondNumber = displayNumber.textContent.slice(0, -1);
+      console.log(`stored ${secondNumber} as second number`);
+      calculateResult(storedOperator);
+  } else {
+    }
+  }
+
+//Simple Result
+resultButton.addEventListener("click", (event) => {
+  result = parseInt(firstNumber)+parseInt(secondNumber);
+  if (result.length > 10){displayNumber.textContent = result.toPrecision(10);}
+  else {displayNumber.textContent = result}
+  firstNumber = result;
+})
+
+function calculateResult(operation){
+  //Addition
+  if (operation === "+"){
+    result = parseInt(firstNumber)+parseInt(secondNumber);
+      if (result.length > 10){displayNumber.textContent = result.toPrecision(10);}
+      else {displayNumber.textContent = result += opObject[event.target.id]}
+    firstNumber = result;
+  }
+  //Subtraction
+  if (operation === "-"){
+    result = parseInt(firstNumber)-parseInt(secondNumber);
+      if (result.length > 10){displayNumber.textContent = result.toPrecision(10);}
+      else {displayNumber.textContent = result += opObject[event.target.id]}
+    firstNumber = result;
+  }
+  //Multiplication
+  if (operation === "×"){
+    result = parseInt(firstNumber)*parseInt(secondNumber);
+      if (result.length > 10){displayNumber.textContent = result.toPrecision(10);}
+      else {displayNumber.textContent = result += opObject[event.target.id]}
+    firstNumber = result;
+  }
+  //Division
+    if (operation === "÷"){
+    result = parseInt(firstNumber)/parseInt(secondNumber);
+      if (result.length > 10){displayNumber.textContent = result.toPrecision(10);}
+      else {displayNumber.textContent = result += opObject[event.target.id]}
+    firstNumber = result;
+  }
+
+  //Power2
+
+  //Power3
+
+  //Square Root
+
+  //Pi
+
+}
+
 
 
 //Comma button
@@ -77,81 +166,10 @@ clearButton.addEventListener("click", (event) => {
 deleteButton.addEventListener("click", (event) => {
   if (displayNumber.textContent.length === 1 ||
       displayNumber.textContent.length === 2 &&
-      displayNumber.textContent[0] === "-"){
+      displayNumber.textContent[0] === "-")
+      {
         displayNumber.textContent = "0"
   } else {
       displayNumber.textContent = displayNumber.textContent.slice(0, -1);
   }
 })
-
-// Operator buttons
-for (button of operationButtons){
-  button.addEventListener("click", (event) => {
-    if (!opArray.includes(displayNumber.textContent)){
-        storeOperation(opObject[event.target.id]);
-/*         displayNumber.textContent = opObject[event.target.id]; */
-    }}
-
-
-  )
-}
-
-//Store and initiate calculation
-function storeOperation(operation){
-  if (firstNumber === undefined){
-      firstNumber = displayNumber.textContent;
-      displayNumber.textContent = displayNumber.textContent += operation;
-  } else if (displayNumber.textContent[displayNumber.textContent.length] !== opArray.includes(displayNumber.textContent)){
-      secondNumber = displayNumber.textContent;
-      calculateResult(operation)
-  } else if (storedOperator === undefined){
-    storedOperator = operation
-  } else {
-    }
-  }
-
-
-
-function calculateResult(operation){
-  //Addition
-  if (operation === "+"){
-    console.log(firstNumber);
-    console.log(storedOperator);
-    console.log(secondNumber);
-    result = parseInt(firstNumber)+parseInt(secondNumber);
-    displayNumber.textContent = result;
-    firstNumber = result;
-    console.log(result);
-  }
-  //Subtraction
-  if (operation === "-"){
-    result = parseInt(firstNumber)-parseInt(secondNumber);
-    displayNumber.textContent = result;
-    firstNumber = result;
-    console.log(result);
-  }
-  //Multiplication
-  if (operation === "×"){
-    result = parseInt(firstNumber)*parseInt(secondNumber);
-    displayNumber.textContent = result;
-    firstNumber = result;
-    console.log(result);
-  }
-  //Division
-    if (operation === "÷"){
-    result = parseInt(firstNumber)/parseInt(secondNumber);
-    displayNumber.textContent = result;
-    firstNumber = result;
-    console.log(result);
-  }
-
-  //Power2
-
-  //Power3
-
-  //Square Root
-
-  //Pi
-
-}
-
