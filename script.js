@@ -31,22 +31,25 @@ let errorState = false;
 for (button of numButtons){
   button.addEventListener("click", (event) => {
     if (errorState === true){return}
-    if (result !== undefined && firstNumber !== undefined && event.target.id !== "prefix"){
-      result = 0;
+    if (result !== undefined && firstNumber !== undefined && event.target.id !== "prefix" && event.target.id !== "comma"){
+
+      result = undefined;
       displayNumber.textContent = 0;
       concatNumber(event.target.textContent);
       return;
-    } else if (result !== undefined && event.target.id !== "prefix"){
-      result = 0;
+    } else if (result !== undefined && event.target.id !== "prefix" && event.target.id !== "comma"){
+
+      result = undefined;
       displayNumber.textContent = 0;
-    }
-    if (event.target.id != "comma" && event.target.id != "prefix"
+    } else if (event.target.id != "comma" && event.target.id != "prefix"
         && (!Object.values(opObject).some(op => displayNumber.textContent.endsWith(op)))){
+
           concatNumber(event.target.textContent);
-    }
-    if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op)) && event.target.id != "prefix"){
+    } else if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op)) && event.target.id != "prefix" && event.target.id != "comma"){
+
       displayNumber.textContent = 0;
       concatNumber(event.target.textContent);
+      return;
     }
   })
 }
@@ -57,7 +60,7 @@ function storeOperator(){
   console.log(`stored "${storedOperator}" as new operator`);
 }
 
-//Number assembler
+//Concat Numbers
 function concatNumber(number){
   if (displayNumber.textContent.length === 10){
       return false;
@@ -75,7 +78,6 @@ for (button of operationButtons){
     if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
       displayNumber.textContent = displayNumber.textContent.slice(0, -1);
       displayNumber.textContent = displayNumber.textContent += opObject[event.target.id];
-      storeNumbers();
       storeOperator();
     } else{
         displayNumber.textContent = displayNumber.textContent += opObject[event.target.id];
@@ -155,55 +157,98 @@ function calculateResult(operation){
 }
 
 //Single Number Operations
-  //Square Root
+
+//Square Root
 rootButton.addEventListener("click", () => {
   if (errorState === true){return}
+  let savedNumber = 0;
   if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
-    saveNumber = parseFloat(displayNumber.textContent.slice(0, -1));
-    console.log(saveNumber)
-  } else {
-    saveNumber = displayNumber.textContent;
+    savedNumber = parseFloat(displayNumber.textContent.slice(0, -1));}
+  else{
+    savedNumber = displayNumber.textContent;
   }
-  console.log(saveNumber)
   clearCalculator();
-
+  result = Math.sqrt(savedNumber)
+  //Output Validation
+  if (result.toString().length > 10){displayNumber.textContent = result.toPrecision(10)}
+  else {displayNumber.textContent = result}
 })
-suptwo
-  //Power2
 
-  //Power3
+//Power2
+suptwoButton.addEventListener("click", () => {
+  if (errorState === true){return}
+  let savedNumber = 0;
+  if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
+    savedNumber = parseFloat(displayNumber.textContent.slice(0, -1));}
+  else{
+    savedNumber = displayNumber.textContent;
+  }
+  clearCalculator();
+  result = savedNumber ** 2;
+  //Output Validation
+  if (result.toString().length > 10){displayNumber.textContent = result.toPrecision(10)}
+  else {displayNumber.textContent = result}
+})
+
+//Power3
+supthreeButton.addEventListener("click", () => {
+  if (errorState === true){return}
+  let savedNumber = 0;
+  if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
+    savedNumber = parseFloat(displayNumber.textContent.slice(0, -1));}
+  else{
+    savedNumber = displayNumber.textContent;
+  }
+  clearCalculator();
+  result = savedNumber ** 3;
+  //Output Validation
+  if (result.toString().length > 10){displayNumber.textContent = result.toPrecision(10)}
+  else {displayNumber.textContent = result}
+})
+
+//Pi
+piButton.addEventListener("click", () => {
+  if (errorState === true){return}
+  let savedNumber = 0;
+  if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
+    savedNumber = parseFloat(displayNumber.textContent.slice(0, -1));}
+  else{
+    savedNumber = displayNumber.textContent;
+  }
+  clearCalculator();
+  result = 3.14159265;
+  //Output Validation
+  if (result.toString().length > 10){displayNumber.textContent = result.toPrecision(10)}
+  else {displayNumber.textContent = result}
+})
 
 
-  //Pi
 
 //Comma button
 commaButton.addEventListener("click", (event) => {
   if (errorState === true){return}
-  if (event.target.id === "comma" && displayNumber.textContent.includes(".")){
+  if (displayNumber.textContent.includes(".")){
       return false;
-  } else if (event.target.id === "comma" && displayNumber.textContent === "0"){
+  } else if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
+      return;
+  } else if (displayNumber.textContent === "0"){
       displayNumber.textContent = "0.";
   } else {
-      displayNumber.textContent += ".";
+        displayNumber.textContent += ".";
   }
 })
 
 //Prefix button
 prefixButton.addEventListener("click", () => {
   if (errorState === true){return}
-  console.log(displayNumber.textContent)
   if (displayNumber.textContent === "0"){
-    console.log("a");
     return false;
   } else if (displayNumber.textContent[0] != "-" && !isNaN(parseFloat(displayNumber.textContent))){
     console.log("minus added");
     displayNumber.textContent = "-" + displayNumber.textContent;
   } else if (Number.isNaN(parseFloat(displayNumber.textContent[0])) && displayNumber.textContent !== undefined){
     console.log("minus removed");
-    console.log(displayNumber.textContent)
-    console.log(Number.isNaN(parseFloat(displayNumber.textContent[0])))
     displayNumber.textContent = displayNumber.textContent.slice(1);
-    console.log(displayNumber.textContent)
   }})
 
 function clearCalculator(){
