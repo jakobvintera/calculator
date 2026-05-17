@@ -78,7 +78,7 @@ body {
   margin-left: 5px;
 }
 
-.operators {
+.singleNumOp {
   display: flex;
   flex-direction: row;
   width: 100%;
