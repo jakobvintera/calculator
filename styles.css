@@ -9,7 +9,7 @@
 }
 
 body {
-  font-family: "Roboto";
+  font-family: "Nunito", sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -169,7 +169,7 @@ body {
   border-radius: 10px;
   gap: 7px;
   padding: 20px 10px 30px 10px;
-  background-color: rgb(72, 16, 94);
+  background-color: rgb(74, 28, 92);
 }
 
 .historyPanel {
@@ -189,7 +189,7 @@ body {
   display: flex;
   justify-content: end;
   align-items: center;
-  border-top: 2px dotted rgb(174, 73, 211);
+  border-top: 2px dotted rgb(139, 60, 167);
   border-bottom-style: hidden;
   height: 40px;
   margin: 0px 4px 0px 2px;
@@ -201,6 +201,7 @@ body {
   flex: 1;
   border: none;
   background-color: rgb(48, 21, 58);
+  visibility: hidden
 }
 
 .historyResults {
@@ -214,6 +215,10 @@ body {
   color: rgb(255, 255, 255)
 }
 
+button svg {
+  pointer-events: none;
+}
+
 #firstBar {
   border-top: hidden;
 }
@@ -223,15 +228,21 @@ h3 {
 }
 
 
-.creator div {
-  padding: 30px;
+.madeBy {
+  padding-top: 9px;
 }
 
-.creator p {
+.creator {
   display: flex;
   justify-content: center;
-  padding: 37px;
-  color: rgb(250, 153, 255);
+  align-items: center;
+  padding: 10px 10px 0px 10px;
+  color: #ce90b9;
   letter-spacing: 5%;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
+  font-family: "Nunito", sans-serif;
+}
+
+img {
+  height: 30px;
 }
