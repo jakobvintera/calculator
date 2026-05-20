@@ -102,6 +102,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: "Nunito", Verdana, Geneva, Tahoma, sans-serif;
   flex: 1;
   color: rgb(72, 16, 94);
   font-size: 2rem;
