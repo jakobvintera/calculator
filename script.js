@@ -11,6 +11,7 @@ const supthreeButton = document.querySelector("#supthree");
 const piButton = document.querySelector("#pi");
 const display = document.querySelector(".display");
 const historyPanel = document.querySelector(".historyPanel");
+const historyResults = document.querySelectorAll(".historyResults");
 let displayNumber = document.querySelector("#displayNumber");
 
 const numArray = ["1","2","3","4","5","6","7","8","9","0"]
@@ -27,26 +28,31 @@ let result;
 let errorState = false;
 
 
+//Save results to history
+function saveToHistory(resultToSave) {
+  for (let i = 0; i < historyResults.length - 1; i++){
+    historyResults[i].textContent = historyResults[i+1].textContent;
+  }
+  historyResults[historyResults.length -1].textContent = resultToSave;
+}
+
+
 //Number buttons
 for (button of numButtons){
   button.addEventListener("click", (event) => {
     if (errorState === true){return}
     if (result !== undefined && firstNumber !== undefined && event.target.id !== "prefix" && event.target.id !== "comma"){
-
       result = undefined;
       displayNumber.textContent = 0;
       concatNumber(event.target.textContent);
       return;
     } else if (result !== undefined && event.target.id !== "prefix" && event.target.id !== "comma"){
-
       result = undefined;
       displayNumber.textContent = 0;
     } else if (event.target.id != "comma" && event.target.id != "prefix"
         && (!Object.values(opObject).some(op => displayNumber.textContent.endsWith(op)))){
-
           concatNumber(event.target.textContent);
     } else if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op)) && event.target.id != "prefix" && event.target.id != "comma"){
-
       displayNumber.textContent = 0;
       concatNumber(event.target.textContent);
       return;
@@ -144,8 +150,13 @@ function calculateResult(operation){
   }
 
   //Output Validation
-  if (result.toString().length > 10){displayNumber.textContent = result.toPrecision(10)}
-  else {displayNumber.textContent = result}
+  if (result.toString().length > 10){
+    displayNumber.textContent = result.toPrecision(10)
+    saveToHistory(result.toPrecision(10));
+  } else {
+    displayNumber.textContent = result
+    saveToHistory(result);
+  }
   if (event.target.id !== "result"){displayNumber.textContent += opObject[event.target.id]}
 
   //Reset variables
@@ -156,8 +167,7 @@ function calculateResult(operation){
   console.log(`reset secondNumber and storedOperator`)
 }
 
-//Single Number Operations
-
+    //Single Number Operations
 //Square Root
 rootButton.addEventListener("click", () => {
   if (errorState === true){return}
@@ -167,7 +177,6 @@ rootButton.addEventListener("click", () => {
   else{
     savedNumber = displayNumber.textContent;
   }
-  clearCalculator();
   result = Math.sqrt(savedNumber)
   //Output Validation
   if (result.toString().length > 10){displayNumber.textContent = result.toPrecision(10)}
@@ -183,7 +192,6 @@ suptwoButton.addEventListener("click", () => {
   else{
     savedNumber = displayNumber.textContent;
   }
-  clearCalculator();
   result = savedNumber ** 2;
   //Output Validation
   if (result.toString().length > 10){displayNumber.textContent = result.toPrecision(10)}
@@ -199,7 +207,6 @@ supthreeButton.addEventListener("click", () => {
   else{
     savedNumber = displayNumber.textContent;
   }
-  clearCalculator();
   result = savedNumber ** 3;
   //Output Validation
   if (result.toString().length > 10){displayNumber.textContent = result.toPrecision(10)}
@@ -209,17 +216,10 @@ supthreeButton.addEventListener("click", () => {
 //Pi
 piButton.addEventListener("click", () => {
   if (errorState === true){return}
-  let savedNumber = 0;
   if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
-    savedNumber = parseFloat(displayNumber.textContent.slice(0, -1));}
-  else{
-    savedNumber = displayNumber.textContent;
+    displayNumber.textContent = "0"
   }
-  clearCalculator();
-  result = 3.14159265;
-  //Output Validation
-  if (result.toString().length > 10){displayNumber.textContent = result.toPrecision(10)}
-  else {displayNumber.textContent = result}
+  concatNumber("3.14159265");
 })
 
 
@@ -251,6 +251,9 @@ prefixButton.addEventListener("click", () => {
     displayNumber.textContent = displayNumber.textContent.slice(1);
   }})
 
+//Clear button
+clearButton.addEventListener("click", clearCalculator);
+
 function clearCalculator(){
   displayNumber.textContent = "0";
   firstNumber = undefined;
@@ -260,7 +263,6 @@ function clearCalculator(){
   errorState = false;
 }
 
-clearButton.addEventListener("click", clearCalculator);
 
 //Delete button
 deleteButton.addEventListener("click", () => {
