@@ -28,14 +28,6 @@ let result;
 let errorState = false;
 
 
-//Save results to history
-function saveToHistory(resultToSave) {
-  for (let i = 0; i < historyResults.length - 1; i++){
-    historyResults[i].textContent = historyResults[i+1].textContent;
-  }
-  historyResults[historyResults.length -1].textContent = resultToSave;
-}
-
 
 //Number buttons
 for (button of numButtons){
@@ -81,12 +73,21 @@ function concatNumber(number){
 for (button of operationButtons){
   button.addEventListener("click", (event) => {
     if (errorState === true){return}
-    if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
-      displayNumber.textContent = displayNumber.textContent.slice(0, -1);
-      displayNumber.textContent = displayNumber.textContent += opObject[event.target.id];
+    if (result !== undefined){
+      result = undefined;
+      if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
+        displayNumber.textContent = displayNumber.textContent.slice(0, -1);
+        displayNumber.textContent += opObject[event.target.id];
+      } else {
+        displayNumber.textContent += opObject[event.target.id];
+      }
       storeOperator();
-    } else{
-        displayNumber.textContent = displayNumber.textContent += opObject[event.target.id];
+    } else if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
+      displayNumber.textContent = displayNumber.textContent.slice(0, -1);
+      displayNumber.textContent += opObject[event.target.id];
+      storeOperator();
+    } else {
+        displayNumber.textContent += opObject[event.target.id];
         storeNumbers();
         storeOperator();
     }
@@ -153,9 +154,11 @@ function calculateResult(operation){
   if (result.toString().length > 10){
     displayNumber.textContent = result.toPrecision(10)
     saveToHistory(result.toPrecision(10));
+    console.log("......saveToHistory called");
   } else {
     displayNumber.textContent = result
     saveToHistory(result);
+    console.log(".........saveToHistory called")
   }
   if (event.target.id !== "result"){displayNumber.textContent += opObject[event.target.id]}
 
@@ -216,7 +219,7 @@ supthreeButton.addEventListener("click", () => {
 //Pi
 piButton.addEventListener("click", () => {
   if (errorState === true){return}
-  if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
+  if (Object.values(opObject).some(op => displayNumber.textContent.endsWith(op)) || !Object.values(opObject).some(op => displayNumber.textContent.endsWith(op))){
     displayNumber.textContent = "0"
   }
   concatNumber("3.14159265");
@@ -246,9 +249,11 @@ prefixButton.addEventListener("click", () => {
   } else if (displayNumber.textContent[0] != "-" && !isNaN(parseFloat(displayNumber.textContent))){
     console.log("minus added");
     displayNumber.textContent = "-" + displayNumber.textContent;
+    storeNumbers();
   } else if (Number.isNaN(parseFloat(displayNumber.textContent[0])) && displayNumber.textContent !== undefined){
     console.log("minus removed");
     displayNumber.textContent = displayNumber.textContent.slice(1);
+    storeNumbers();
   }})
 
 //Clear button
@@ -276,3 +281,14 @@ deleteButton.addEventListener("click", () => {
       displayNumber.textContent = displayNumber.textContent.slice(0, -1);
   }
 })
+
+
+//Save results to history
+function saveToHistory(resultToSave) {
+  for (let i = 0; i < historyResults.length - 1; i++){
+    historyResults[i].textContent = historyResults[i+1].textContent;
+    historyResults[i].previousElementSibling.style.visibility = getComputedStyle(historyResults[i+1].previousElementSibling).visibility;
+  }
+  historyResults[historyResults.length -1].textContent = resultToSave;
+  historyResults[historyResults.length -1].previousElementSibling.style.visibility = "visible";
+}
